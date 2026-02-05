@@ -9,10 +9,10 @@
                 <p class="text-sm text-slate-500">Gérez les membres de votre équipe et leurs permissions.</p>
             </div>
             <div class="flex items-center gap-3">
-                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 transition-all">
+                <a  href='{{ route('users.create') }}' class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 transition-all">
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                     Ajouter un utilisateur
-                </button>
+                </a>
             </div>
         </header>
 
@@ -25,14 +25,14 @@
                         </span>
                         <input type="text" placeholder="Rechercher par nom ou email..." class="pl-10 w-full pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                     </div>
-                    <div class="flex items-center gap-2">
-                        <select class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
-                            <option>Tous les rôles</option>
-                            <option>Admin</option>
-                            <option>Éditeur</option>
-                            <option>Client</option>
+                    <form method="GET" action="{{ route('users.index') }}">
+                        <select name="role" onchange="this.form.submit()" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Tous les rôles</option>
+                            <option value="admin" {{ request('role')=='admin' ? 'selected' : '' }}>Admin</option>
+                            <option value="formateur" {{ request('role')=='teacher' ? 'selected' : '' }}>Teacher</option>
+                            <option value="etudiant" {{ request('role')=='student' ? 'selected' : '' }}>Student</option>
                         </select>
-                    </div>
+                    </form>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -41,70 +41,53 @@
                             <tr>
                                 <th class="px-6 py-4">Utilisateur</th>
                                 <th class="px-6 py-4">Rôle</th>
-                                <th class="px-6 py-4">Statut</th>
-                                <th class="px-6 py-4">Dernière connexion</th>
+                                <th class="px-6 py-4">Cin</th>
+                                <th class="px-6 py-4">Telephone</th>
                                 <th class="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
-                            <tr class="hover:bg-slate-50 transition-colors">
+                            @foreach( $users as $u)
+                                <tr class="hover:bg-slate-50 transition-colors">
                                 <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <img src="https://i.pravatar.cc/150?u=1" class="h-10 w-10 rounded-full object-cover shadow-sm" alt="">
-                                        <div>
-                                            <p class="font-bold text-slate-800 text-sm">Sophie Martin</p>
-                                            <p class="text-xs text-slate-500">sophie.m@exemple.com</p>
+                                        <div class="flex items-center gap-3">
+                                            <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">TL</div>
+                                            <div>
+                                                <p class="font-bold text-slate-800 text-sm">{{ $u->prenom }} {{ $u->nom }}</p>
+                                                <p class="text-xs text-slate-500">{{ $u->email }}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="text-sm font-medium text-slate-700">Administrateur</span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-green-600"></span> Actif
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-slate-500 italic">Il y a 12 min</td>
-                                <td class="px-6 py-4 text-right">
-                                    <button class="text-slate-400 hover:text-blue-600 px-2 transition-colors">Modifier</button>
-                                    <button class="text-slate-400 hover:text-red-600 px-2 transition-colors">Supprimer</button>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-slate-50 transition-colors">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">TL</div>
-                                        <div>
-                                            <p class="font-bold text-slate-800 text-sm">Thomas Legrand</p>
-                                            <p class="text-xs text-slate-500">thomas.l@agence.fr</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="text-sm font-medium text-slate-700">Éditeur</span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Hors ligne
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-slate-500 italic">Hier, à 18:30</td>
-                                <td class="px-6 py-4 text-right">
-                                    <button class="text-slate-400 hover:text-blue-600 px-2 transition-colors">Modifier</button>
-                                    <button class="text-slate-400 hover:text-red-600 px-2 transition-colors">Supprimer</button>
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> {{ $u->roles}}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-sm font-medium text-slate-700">{{ $u->cin }}</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-slate-500 italic">{{ $u->telephone }}</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <a href="{{ route('users.edit', $u->id) }}" class="text-slate-400 hover:text-blue-600 px-2 transition-colors">
+                                            Modifier
+                                        </a>
+                                        <form action="{{ route('users.destroy', $u->id) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" onclick="return confirm('Supprimer cet utilisateur ?')" class="text-slate-400 hover:text-red-600 px-2 transition-colors">
+                                                Supprimer
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
-                </div>
-
-                <div class="p-4 border-t border-slate-100 flex items-center justify-between">
-                    <p class="text-sm text-slate-500">Affichage de 1 à 10 sur 45 utilisateurs</p>
-                    <div class="flex gap-2">
-                        <button class="px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-50 transition-all">Précédent</button>
-                        <button class="px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800 transition-all">Suivant</button>
-                    </div>
+                    @if ($users->hasPages())
+                        <div class="mt-4">
+                            {{ $users->links('vendor.pagination.tailwind') }}
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
