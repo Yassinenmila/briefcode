@@ -38,6 +38,6 @@ class User extends Authenticatable
 
     public function classes(){
 
-        return $this->belongsToMany(Classe::class, 'class_student');
+        return $this->belongsToMany(Classe::class, 'class_student', 'student_id', 'class_id');
     }
 }
