@@ -39,7 +39,8 @@ class SprintController extends Controller
     public function show(string $id)
     {
         $sprint = \App\Models\Sprint::findOrFail($id);
-        return view('Admin.sprint.show', compact('sprint'));
+        $Competences = $sprint->competences; 
+        return view('Admin.sprint.show', compact('sprint', 'Competences'));
     }
 
     /**
@@ -48,6 +49,8 @@ class SprintController extends Controller
     public function edit(string $id)
     {
         $sprint = \App\Models\Sprint::findOrFail($id);
+        $Competences = \App\Models\Competence::all();
+         return view('Admin.sprint.edit', compact('sprint', 'Competences'));
         return view('Admin.sprint.edit', compact('sprint'));
     }
 
@@ -57,11 +60,17 @@ class SprintController extends Controller
     public function update(Request $request, string $id)
     {
         $sprint = \App\Models\Sprint::findOrFail($id);
-        $sprint->title = $request->input('title');
-        $sprint->description = $request->input('description');
-        $sprint->start_date = $request->input('start_date');
-        $sprint->end_date = $request->input('end_date');
-        $sprint->save();
+        $validate = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'competences' => 'array',
+            'competences.*' => 'exists:competences,id',
+        ]);
+        $sprint->update($validate);
+
+        $sprint->competences()->sync($validate['competences'] ?? []);
 
         return redirect()->route('sprints.index')->with('success', 'Sprint mis à jour avec succès.');
     }

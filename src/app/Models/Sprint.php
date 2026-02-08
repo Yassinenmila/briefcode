@@ -16,4 +16,9 @@ class Sprint extends Model
         'start_date',
         'end_date',
     ];
+
+    public function competences()
+    {
+        return $this->belongsToMany(Competence::class, 'competence_sprint', 'sprint_id', 'competence_id');
+    }
 }

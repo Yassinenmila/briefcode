@@ -58,31 +58,14 @@
                 </h3>
 
                 <div class="grid md:grid-cols-2 gap-5">
-                    {{-- Exemple dynamique --}}
-                    {{-- @foreach($sprint->competences as $competence)
+                    @foreach($Competences as $competence)
                     <div class="p-5 bg-slate-50 rounded-xl text-sm font-bold text-slate-800">
-                        {{ $competence->nom }}
+                        {{ $competence->code }}
                     </div>
-                    @endforeach --}}
+                    @endforeach
                 </div>
             </div>
-
-            {{-- SIDE CARD --}}
-            <div class="bg-indigo-600 rounded-[2.5rem] p-8 text-white shadow-xl flex flex-col justify-between">
-                <div>
-                    <p class="text-xs font-black uppercase tracking-[0.2em] opacity-70 mb-3">Brief</p>
-                    <p class="text-lg font-bold italic leading-tight">
-                        API de gestion immobilière
-                    </p>
-                </div>
-
-                <button class="mt-8 py-3 bg-white text-indigo-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all">
-                    Voir le sujet
-                </button>
-            </div>
-
         </div>
-
     </div>
 </main>
 

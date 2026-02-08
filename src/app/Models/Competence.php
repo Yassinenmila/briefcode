@@ -15,4 +15,9 @@ class Competence extends Model
         'description',
         'type'
     ];
+
+    public function sprints()
+    {
+        return $this->belongsToMany(Sprint::class, 'competence_sprint', 'competence_id', 'sprint_id');
+    }
 }

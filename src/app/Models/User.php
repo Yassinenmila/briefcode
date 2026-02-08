@@ -36,6 +36,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function hasRole($role)
+    {
+        return $this->roles === $role;
+    }
+
     public function classe()
     {
         return $this->belongsTo(Classe::class, 'class_id');

@@ -65,25 +65,26 @@
                     <span class="w-1.5 h-6 bg-amber-500 rounded-full"></span>
                     <h2 class="text-sm font-black uppercase tracking-widest text-slate-900">Mise à jour des compétences</h2>
                 </div>
-
-                {{-- <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {{-- Ici, on imagine que $allCompetences contient toutes les compétences dispos --}}
-                   {{-- @foreach(['Architecture MVC', 'Gestion de Base de données', 'API Authentification', 'UI/UX Design', 'Tests Unitaires', 'Déploiement CI/CD'] as $skill)
-                    <label class="group relative flex items-center p-4 bg-slate-50 rounded-2xl cursor-pointer hover:bg-amber-50 transition-all border border-transparent hover:border-amber-100">
-                        {{-- Logique pour cocher si la compétence est déjà associée au sprint --}}
-                        {{--<input type="checkbox" name="competences[]" value="{{ $skill }}" class="hidden peer"
-                            {{ in_array($skill, $sprint->competences->pluck('nom')->toArray()) ? 'checked' : '' }}>
-
-                        <div class="w-5 h-5 rounded-lg border-2 border-slate-200 flex items-center justify-center peer-checked:bg-amber-500 peer-checked:border-amber-500 transition-all">
-                            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"/></svg>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    {{-- Boucle sur toutes les compétences disponibles --}}
+                    @foreach($Competences as $competence)
+                    <label class="group relative flex items-center p-4 bg-slate-50 rounded-2xl cursor-pointer hover:bg-amber-50 transition-all border border-transparent hover:border-amber-200 shadow-sm">
+                        {{-- Checkbox cachée --}}
+                        <input type="checkbox" name="competences[]" value="{{ $competence->id }}" class="hidden peer"
+                            {{ $sprint->competences->contains($competence->id) ? 'checked' : '' }}>
+                        {{-- Case de validation custom --}}
+                        <div class="w-5 h-5 rounded-lg border-2 border-slate-300 flex items-center justify-center peer-checked:bg-amber-500 peer-checked:border-amber-500 transition-all">
+                            <svg class="w-3 h-3 text-white opacity-0 peer-checked:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                            </svg>
                         </div>
-                        <span class="ml-4 text-[11px] font-black uppercase tracking-tighter text-slate-500 group-hover:text-amber-900 transition-colors italic">
-                            {{ $skill }}
+                        {{-- Nom de la compétence --}}
+                        <span class="ml-3 text-[11px] font-black uppercase tracking-tighter text-slate-600 group-hover:text-amber-900 transition-colors italic">
+                            {{ $competence->code }}
                         </span>
                     </label>
                     @endforeach
-                </div> --}}
-
+                </div>
                 <div class="flex items-center justify-end gap-6 mt-16 pt-8 border-t border-slate-100">
                     <a href="{{ route('sprints.show', $sprint->id) }}" class="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-all">
                         Annuler
