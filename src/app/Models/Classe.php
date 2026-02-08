@@ -17,10 +17,13 @@ class Classe extends Model
         'promotion',
     ];
 
-    public function students(){
-        return $this->belongsToMany(User::class, 'class_student', 'class_id', 'student_id');
+    public function students()
+    {
+        return $this->belongsToMany(User::class, 'class_student', 'class_id','student_id');
     }
-    public function teachers(){
-        return $this->belongsTo(User::class, 'teacher_id');
+
+    public function teachers()
+    {
+        return $this->belongsToMany(User::class, 'class_teacher', 'class_id', 'teacher_id');
     }
 }

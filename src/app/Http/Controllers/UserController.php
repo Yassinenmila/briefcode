@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
+
 
 class UserController extends Controller
 {
     public function index(Request $request){
 
-        $query = User::query();
+        $query =User::query();
 
         if ($request->filled('role')) {
             $query->where('roles', $request->role);
@@ -24,7 +26,7 @@ class UserController extends Controller
 
     public function create(){
 
-        return view('Admin.forclass');
+        return view('Admin.users.create');
     }
 
     public function store(Request $request){

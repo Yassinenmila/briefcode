@@ -51,7 +51,7 @@
                                 <tr class="hover:bg-slate-50 transition-colors">
                                 <td class="px-6 py-4">
                                         <div class="flex items-center gap-3">
-                                            <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">TL</div>
+                                            <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">{{ substr($u->nom, 0, 2) }}</div>
                                             <div>
                                                 <p class="font-bold text-slate-800 text-sm">{{ $u->prenom }} {{ $u->nom }}</p>
                                                 <p class="text-xs text-slate-500">{{ $u->email }}</p>

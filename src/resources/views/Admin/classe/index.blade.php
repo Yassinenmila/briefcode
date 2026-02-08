@@ -9,9 +9,9 @@
                 Classes <span class="text-blue-600 italic">BriefCode</span>
             </h1>
         </div>
-        <button class="bg-slate-900 hover:bg-blue-600 text-white px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg active:scale-95">
+        <a href="{{ route('classes.create') }}" class="bg-slate-900 hover:bg-blue-600 text-white px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg active:scale-95">
             Nouvelle Classe +
-        </button>
+        </a>
     </header>
 
     <div class="p-8">
