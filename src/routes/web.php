@@ -12,9 +12,7 @@ Route::get('/login', [AuthController::class, 'index'])->name('login')->middlewar
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/logout',[AuthController::class,'logout']);
 
-Route::get('/', function () {
-    return view('Admin.dashboard');
-})->middleware('auth');
+Route::get('/', function () { return redirect()->route('users.index');})->middleware('auth');
 
 Route::resource('users', UserController::class)->middleware('auth');
 Route::resource('classes',ClasseController::class)->middleware('auth');

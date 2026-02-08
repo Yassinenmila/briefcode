@@ -71,6 +71,9 @@ class SprintController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $sprint = \App\Models\Sprint::findOrFail($id);
+        $sprint->delete();
+
+        return redirect()->route('sprints.index')->with('success', 'Sprint supprimé avec succès.');
     }
 }

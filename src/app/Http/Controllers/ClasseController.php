@@ -12,7 +12,7 @@ class ClasseController extends Controller
     {
         $classes=Classe::orderBy('promotion','desc')->get();
 
-        return view('Admin.classe',compact('classes'));
+        return view('Admin.classe.index',compact('classes'));
     }
 
     public function create()

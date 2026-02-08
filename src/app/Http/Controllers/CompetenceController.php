@@ -6,45 +6,36 @@ use Illuminate\Http\Request;
 
 class CompetenceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         $competences = \App\Models\Competence::all();
         return view('Admin.competence.index', compact('competences'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('Admin.competence.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'code' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        \App\Models\Competence::create($request->all());
+
+        return redirect()->route('competences.index')->with('success', 'Competence created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        //
+        $competence = \App\Models\Competence::findOrFail($id);
+        return view('Admin.competence.edit', compact('competence'));
     }
 
     /**
@@ -52,14 +43,23 @@ class CompetenceController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'code' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $competence = \App\Models\Competence::findOrFail($id);
+        $competence->update($request->all());
+
+        return redirect()->route('competences.index')->with('success', 'Competence updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        $competence = \App\Models\Competence::findOrFail($id);
+        $competence->delete();
+
+        return redirect()->route('competences.index')->with('success', 'Competence deleted successfully.');
     }
 }

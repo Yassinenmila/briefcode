@@ -19,7 +19,7 @@ class UserController extends Controller
 
         $users = $query->latest()->paginate(10);
 
-        return view('Admin.dashboard',compact('users'));
+        return view('Admin.users.index',compact('users'));
     }
 
     public function create(){
