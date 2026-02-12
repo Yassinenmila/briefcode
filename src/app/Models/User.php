@@ -43,7 +43,7 @@ class User extends Authenticatable
 
     public function classe()
     {
-        return $this->belongsTo(Classe::class, 'class_id');
+        return $this->belongsToMany(Classe::class, 'class_student', 'class_id','student_id');
     }
 
     public function teachingClasses()

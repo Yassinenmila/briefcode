@@ -4,10 +4,11 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ClasseController;
+use App\Http\Controllers\ClasseController as AdminClasseController;
 use App\Http\Controllers\SprintController;
 use App\Http\Controllers\CompetenceController;
 use App\Http\Middleware\RoleMiddleware;
+use App\Http\Controllers\Teacher\ClasseController as TeacherClasseController;
 
 Route::get('/',function(){
     return redirect()->route('login');
@@ -15,29 +16,32 @@ Route::get('/',function(){
 
 Route::get('/login', [AuthController::class, 'index'])->middleware('guest')->name('login');
 Route::post('/login',[AuthController::class,'login']);
-Route::post('/logout',[AuthController::class,'logout']);
+Route::get('/logout',[AuthController::class,'logout'])->name('logout');
 
+Route::get('/up', function () {
+    return dd(auth()->check() ? auth()->user()->roles : 'NOT LOGGED');
+})->withoutMiddleware('auth');
 
-
-Route::middleware(['auth', RoleMiddleware::class.':admin'])->prefix('admin')->group(function () {
+Route::middleware(['auth', RoleMiddleware::class.':admin'])->group(function () {
 
     Route::get('/', fn ()=> redirect()->route('users.index'));
     Route::resource('users', UserController::class);
-    Route::resource('classes',ClasseController::class);
-    Route::resource('sprints', SprintController::class);
-    Route::resource('competences',CompetenceController::class);
+    Route::resource('admin/classes',AdminClasseController::class);
+    Route::resource('admin/sprints', SprintController::class);
+    Route::resource('admin/competences',CompetenceController::class);
 
 });
 
-Route::middleware(['auth', RoleMiddleware::class.':teacher'])->prefix('teacher')->group(function(){
+Route::middleware(['auth', RoleMiddleware::class.':teacher'])->group(function(){
 
-    Route::ressource('Students')
+
+    Route::resource('teacher/classes',TeacherClasseController::class)->names('teacher.classes');
 
 });
 
-Route::middleware(['auth', RoleMiddleware::class.':student'])->prefix('student')->group(function(){
+Route::middleware(['auth', RoleMiddleware::class .':student'])->group(function(){
 
-    Route::get('/',function(){
+    Route::get('/', function () {
         return view('welcome');
     });
 
