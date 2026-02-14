@@ -9,6 +9,7 @@ use App\Http\Controllers\SprintController;
 use App\Http\Controllers\CompetenceController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\Teacher\ClasseController as TeacherClasseController;
+use App\Http\Controllers\Teacher\SprintController as TeacherSprintController;
 
 Route::get('/',function(){
     return redirect()->route('login');
@@ -36,6 +37,7 @@ Route::middleware(['auth', RoleMiddleware::class.':teacher'])->group(function(){
 
 
     Route::resource('teacher/classes',TeacherClasseController::class)->names('teacher.classes');
+    Route::resource('teacher/sprints',TeacherSprintController::class)->names('teacher.sprints');
 
 });
 

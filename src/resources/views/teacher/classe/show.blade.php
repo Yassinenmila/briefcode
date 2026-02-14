@@ -52,23 +52,18 @@
                     <div class="p-6 flex items-center justify-between hover:bg-slate-50/80 transition-all group">
                         <div class="flex items-center gap-5">
                             <div class="relative">
-                                <img src="https://ui-avatars.com/api/?name={{ $student->name }}&background=f1f5f9&color=64748b"
+                                <img src="https://ui-avatars.com/api/?name={{ $student->nom }}&background=f1f5f9&color=64748b"
                                      class="h-14 w-14 rounded-2xl object-cover border-2 border-white shadow-md">
                                 <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full"></div>
                             </div>
                             <div>
                                 <h3 class="text-base font-black text-slate-900 uppercase tracking-tighter italic group-hover:text-blue-600 transition-colors">
-                                    {{ $student->name }}
+                                    {{ $student->prenom }}
                                 </h3>
                                 <p class="text-[10px] font-bold text-slate-400 uppercase italic">{{ $student->email }}</p>
                             </div>
                         </div>
-
                         <div class="flex items-center gap-4">
-                            <div class="hidden md:flex flex-col items-end">
-                                <span class="text-[9px] font-black text-slate-300 uppercase italic">Dernier rendu</span>
-                                <span class="text-[10px] font-bold text-slate-600 italic">Il y a 2h</span>
-                            </div>
                             <a href="#" class="p-3 bg-white border border-slate-100 text-slate-400 rounded-xl hover:text-blue-600 hover:border-blue-600 transition-all">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                             </a>
@@ -78,12 +73,9 @@
                 </div>
             </div>
         </div>
-
         <div class="space-y-8">
-
             <div class="bg-slate-900 rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden">
                 <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-400 mb-8 italic">Performance Classe</h3>
-
                 <div class="space-y-8">
                     <div>
                         <div class="flex justify-between items-end mb-3">
@@ -94,7 +86,6 @@
                             <div class="bg-blue-500 h-full w-[88%] rounded-full shadow-[0_0_15px_rgba(59,130,246,0.6)]"></div>
                         </div>
                     </div>
-
                     <div class="grid grid-cols-2 gap-4">
                         <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
                             <p class="text-[9px] font-black text-slate-400 uppercase italic mb-1">Retards</p>
@@ -108,7 +99,6 @@
                 </div>
                 <svg class="absolute -right-10 -bottom-10 w-48 h-48 text-white/5" fill="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-
             <div class="bg-white rounded-[2.5rem] p-8 border border-slate-200 shadow-sm">
                 <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6 italic">Staff Assigné</h3>
                 <div class="space-y-4">

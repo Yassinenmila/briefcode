@@ -25,13 +25,13 @@
         </div>
     </div>
 
-    <form id="edit-class-form" action="{{ route('classes.update', $classe->id) }}" method="POST" class="max-w-7xl mx-auto">
+    <form id="edit-class-form" action="{{ route('teacher.classes.update', $classe->id) }}" method="POST" class="max-w-7xl mx-auto">
         @csrf
         @method('PUT')
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
-            {{-- COLONNE GAUCHE : PARAMÈTRES (4/12) --}}
+            {{-- COLONNE GAUCHE : PARAMÈTRES --}}
             <div class="lg:col-span-4 space-y-8">
                 <div class="bg-white rounded-[2.5rem] p-8 border border-slate-200 shadow-sm relative overflow-hidden">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-full -mr-16 -mt-16 opacity-50"></div>
@@ -45,12 +45,12 @@
                         <div class="space-y-2">
                             <label class="text-[10px] font-black uppercase text-slate-400 ml-1 italic">Nom technique</label>
                             <input name="name" type="text" value="{{ old('name', $classe->name) }}"
-                                class="w-full bg-slate-50 border-none rounded-xl px-4 py-4 text-sm font-black uppercase italic focus:ring-2 focus:ring-amber-500 transition-all shadow-inner">
+                                class="w-full bg-slate-50 border-none rounded-xl px-4 py-4 text-sm font-black uppercase italic focus:ring-2 focus:ring-amber-500 transition-all shadow-inner outline-none">
                         </div>
                         <div class="space-y-2">
                             <label class="text-[10px] font-black uppercase text-slate-400 ml-1 italic">Promotion</label>
                             <input name="promotion" type="text" value="{{ old('promotion', $classe->promotion) }}"
-                                class="w-full bg-slate-50 border-none rounded-xl px-4 py-4 text-sm font-black uppercase italic focus:ring-2 focus:ring-amber-500 shadow-inner">
+                                class="w-full bg-slate-50 border-none rounded-xl px-4 py-4 text-sm font-black uppercase italic focus:ring-2 focus:ring-amber-500 shadow-inner outline-none">
                         </div>
                     </div>
                 </div>
@@ -67,19 +67,28 @@
                 </div>
             </div>
 
-            {{-- COLONNE DROITE : SÉLECTEUR DYNAMIQUE (8/12) --}}
+            {{-- COLONNE DROITE : SÉLECTEUR DYNAMIQUE --}}
             <div class="lg:col-span-8">
                 <div class="bg-white rounded-[3rem] border border-slate-200 shadow-sm overflow-hidden">
 
-                    {{-- BARRE DE FILTRE --}}
+                    {{-- BARRE DE FILTRE & MAGIC SELECT --}}
                     <div class="p-8 border-b border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-50/30">
-                        <h2 class="text-xs font-black uppercase tracking-widest text-slate-900 flex items-center gap-3">
-                            <span class="w-1.5 h-6 bg-amber-500 rounded-full"></span>
-                            Distribution des Apprenants
-                        </h2>
+                        <div class="flex items-center gap-4">
+                            <h2 class="text-xs font-black uppercase tracking-widest text-slate-900 flex items-center gap-3">
+                                <span class="w-1.5 h-6 bg-amber-500 rounded-full"></span>
+                                Distribution des Apprenants
+                            </h2>
+                            <button type="button" onclick="randomSelect()"
+                                class="group flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-slate-900 text-white rounded-xl transition-all shadow-lg shadow-blue-900/20 active:scale-95">
+                                <svg class="w-3.5 h-3.5 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                                <span class="text-[8px] font-black uppercase tracking-widest italic">Magic Select</span>
+                            </button>
+                        </div>
                         <div class="flex gap-2">
                             <div class="px-4 py-2 bg-white border border-slate-200 rounded-xl text-[9px] font-black uppercase text-slate-400 italic">
-                                Total sélectionné: <span id="js-count" class="text-slate-900">{{ $classe->students->count() }}</span>
+                                Total sélectionné: <span id="js-count" class="text-slate-900 transition-all duration-300 inline-block">{{ $classe->students->count() }}</span>
                             </div>
                         </div>
                     </div>
@@ -161,26 +170,65 @@
 </main>
 
 <script>
-    // Update live counter
+    // 1. GESTION DU COMPTEUR LIVE
     const checks = document.querySelectorAll('input[type="checkbox"]');
     const display = document.getElementById('js-count');
 
-    checks.forEach(c => {
-        c.addEventListener('change', () => {
-            const total = document.querySelectorAll('input[type="checkbox"]:checked').length;
-            display.innerText = total;
+    function updateCounter() {
+        const total = document.querySelectorAll('input[type="checkbox"]:checked').length;
+        display.innerText = total;
 
-            // Animation flash
-            display.classList.add('text-amber-500');
-            setTimeout(() => display.classList.remove('text-amber-500'), 300);
-        });
+        // Animation de feedback sur le chiffre
+        display.classList.add('text-amber-500', 'scale-125');
+        setTimeout(() => display.classList.remove('text-amber-500', 'scale-125'), 300);
+    }
+
+    checks.forEach(c => {
+        c.addEventListener('change', updateCounter);
     });
+
+    // 2. LOGIQUE DE SÉLECTION ALÉATOIRE (MAGIC SELECT)
+    function randomSelect() {
+        const countToAdd = prompt("Combien d'étudiants aléatoires voulez-vous ajouter ?", "5");
+
+        if (countToAdd === null || isNaN(countToAdd) || countToAdd <= 0) return;
+
+        // On cible uniquement les étudiants "Disponibles" qui ne sont pas cochés
+        const availableCheckboxes = Array.from(document.querySelectorAll('input[name="students[]"]:not(:checked)'));
+
+        if (availableCheckboxes.length === 0) {
+            alert("Aucun étudiant disponible à ajouter !");
+            return;
+        }
+
+        // Mélange Fisher-Yates
+        const shuffled = availableCheckboxes.sort(() => 0.5 - Math.random());
+        const toSelect = shuffled.slice(0, Math.min(parseInt(countToAdd), availableCheckboxes.length));
+
+        toSelect.forEach((cb, index) => {
+            // Effet cascade (100ms entre chaque étudiant)
+            setTimeout(() => {
+                cb.checked = true;
+                updateCounter();
+
+                const card = cb.closest('label');
+                card.classList.add('ring-4', 'ring-blue-500', 'scale-[1.05]', 'bg-blue-50', 'z-20');
+
+                setTimeout(() => {
+                    card.classList.remove('ring-4', 'ring-blue-500', 'scale-[1.05]');
+                }, 800);
+            }, index * 120);
+        });
+    }
 </script>
 
 <style>
-    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 20px; }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+
+    /* Animation pour le compteur */
+    #js-count { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 </style>
 @endsection

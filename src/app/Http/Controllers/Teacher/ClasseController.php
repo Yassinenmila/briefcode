@@ -14,34 +14,12 @@ class ClasseController extends Controller
         return view('teacher.classe.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $classe=Classe::with(['teachers','students'])->findOrfail($id);
         return view('teacher.classe.show',compact('classe'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $classe = Classe::with('students')->findOrFail($id);
@@ -49,19 +27,24 @@ class ClasseController extends Controller
         return view('teacher.classe.edit' , compact('classe','available_students'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
-    }
+        $classe= Classe::findOrfail($id);
+        $data=$request->validate([
+            'name' => 'required|string|max:255',
+            'promotion' => 'required|string|max:255',
+            'students' => 'nullable|array',
+            'students.*' => 'exists:users,id',
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $classe->update([
+            'name'=>$data['name'],
+            'promotion'=>$data['promotion'],
+        ]);
+
+        $classe->students()->sync($data['students'??[]]);
+
+        return redirect()->route('teacher.classes.show',$classe->id)->with('success','Classe mise a jour avec succes !!');
+
     }
 }
